@@ -22,12 +22,17 @@ const Column = (props) => {
 
             {props.cards
                 .filter(el => el.status === status.title)
+                .sort((a, b) => a.priority - b.priority)
                 .map(el =>
                     <Card
                         key={el._id}
                         card={el}
                         changeStatus={props.changeStatus}
                         statuses={props.statuses}
+                        deleteTask={props.deleteTask}
+                        editTask={props.editTask}
+                        priority={props.priority}
+                        changePriority={props.changePriority}
                     />)}
         </div>
     );

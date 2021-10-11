@@ -2,49 +2,50 @@ import React, {useState} from 'react';
 import {Button, Input, Modal, ModalBody, ModalFooter, ModalHeader} from 'reactstrap';
 
 
-const CreateTask = (props) => {
+const EditTask = (props) => {
 
-const [modal, setModal] = useState(false);
-const toggle = () => setModal(!modal);
+    const { card, priority } = props;
 
-const [taskNameInput, setTaskNameInput] = useState('');
-const [taskDescriptionInput, setTaskDescriptionInput] = useState('');
-const [taskPriorityInput, setTaskPriorityInput] = useState('');
+    const [modal, setModal] = useState(false);
+    const toggle = () => setModal(!modal);
 
-const onCreate = () => {
+    const [taskNameInput, setTaskNameInput] = useState(card.name);
+    const [taskDescriptionInput, setTaskDescriptionInput] = useState(card.description);
+    const [taskPriorityInput, setTaskPriorityInput] = useState(card.priority);
 
-    props.createTask({
-        name: taskNameInput,
-        description: taskDescriptionInput,
-        priority: taskPriorityInput,
-        status: props.statuses[0].title
-    });
 
-    toggle();
-    setTaskNameInput('')
-    setTaskDescriptionInput('')
-    setTaskPriorityInput('')
-}
+    const onEdit = () => {
+        props.editTask( card._id, {
+            name: taskNameInput,
+            description: taskDescriptionInput,
+            priority: taskPriorityInput,
+        });
+
+        toggle();
+    }
 
     return (
         <div>
             <div>
-                <Button color="secondary" onClick={toggle}>Create Task</Button>
+                <Button color="secondary" onClick={toggle}> Edit </Button>
                 <Modal isOpen={modal} toggle={toggle}>
-                    <ModalHeader >Create Task</ModalHeader>
+                    <ModalHeader > Edit Task</ModalHeader>
                     <ModalBody>
+                        <b>Task name</b>
                         <Input placeholder="Task name" value={taskNameInput} onChange={(e)=>setTaskNameInput(e.target.value)}/>
                         <br/>
+                        <b>Description</b>
                         <Input placeholder="Description" value={taskDescriptionInput} onChange={(e)=>setTaskDescriptionInput(e.target.value)}/>
                         <br/>
+                        <b>Priority</b>
                         <select className="form-select" aria-label="Default select example" value={taskPriorityInput} onChange={(e)=>setTaskPriorityInput(e.target.value)}>
-                            <option selected>Priority</option>
-                            {props.priority.map(el => <option key={el} value={el}>{el}</option>)}
+                            <option selected> {taskPriorityInput} </option>
+                            {priority.map(el => <option key={el} value={el}> {el} </option>)}
                         </select>
                     </ModalBody>
                     <ModalFooter>
                         <Button disabled={ !taskNameInput || !taskDescriptionInput || !taskPriorityInput} color="secondary"
-                                onClick={onCreate} >Create
+                                onClick={onEdit} > Update
                         </Button>{' '}
                         <Button color="light-gray" onClick={toggle}>Cancel</Button>
                     </ModalFooter>
@@ -54,4 +55,4 @@ const onCreate = () => {
     );
 };
 
-export default CreateTask;
+export default EditTask;
